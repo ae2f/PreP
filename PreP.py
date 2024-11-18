@@ -8,7 +8,7 @@ def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str]
         PATH, FLAG = In.Rd(LINE)
         if(PATH == ''):
             if(FLAG == In.RD_GOT_NOTHING[1]):
-                ret += LINE + '\n'
+                ret += LINE if LINE.endswith('\n') else LINE + '\n'
             continue
 
         FND_PATH, FND_SRC = In.Fnd(PATH, [currdir] if FLAG == Env.EXCLUDED else [currdir] + include)
