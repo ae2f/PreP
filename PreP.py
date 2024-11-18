@@ -2,7 +2,7 @@ import In
 import Env
 import collections.abc as types
 
-def Include(src: types.Iterable[str], currdir = str, include: types.Iterable[str] = []) -> str:
+def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str] = []) -> str:
     ret = ''
     for LINE in src:
         PATH, FLAG = In.Rd(LINE)
