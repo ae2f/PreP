@@ -1,5 +1,5 @@
 import os
-import Env
+from . import Env
 import collections.abc as types
 
 RD_INVALID: tuple[str, bool] = ('', Env.EXCLUDED)
@@ -14,12 +14,10 @@ def Rd(l: str) -> PF_T:
         FLAG : bool
         POST : str
         match(PATH_GET[0]):
-            case '<': POST = '>'; FLAG = Env.INCLUDED; pass
-            case '"': POST = '"'; FLAG = Env.EXCLUDED; pass
+            case '<': POST = '>\n'; FLAG = Env.INCLUDED; pass
+            case '"': POST = '"\n'; FLAG = Env.EXCLUDED; pass
             case _: return RD_INVALID
-        
-        if(not PATH_GET.endswith(POST)): return RD_INVALID
-        RET_STR : str = PATH_GET[0:len(PATH_GET)]
+        RET_STR : str = PATH_GET[1:len(PATH_GET) - 2]
         return (RET_STR, FLAG)
     
     else: return RD_GOT_NOTHING
@@ -27,8 +25,7 @@ def Rd(l: str) -> PF_T:
 def Fnd(fname: str, include: types.Iterable[str]) -> tuple[str, list[str]]:
     for PATH in include:
         if(not os.path.isfile(PATH + "/" + fname)):
-            return ('', [])
-
+            continue
         with open(PATH + '/' + fname, 'r') as F:
             return (PATH, F.readlines())
         
