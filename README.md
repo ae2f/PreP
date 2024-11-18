@@ -1,2 +1,3 @@
-# IncludeGen
- Look for #include for every file, and include it.
+# PreP
+- Rel-v0.1
+> Mimic of the preprocessor of C.
