@@ -2,8 +2,7 @@ from . import In
 from . import Env
 import collections.abc as types
 
-def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str] = []) -> list[str]:
-    ret = []
+def Include_Imp(ret : list[str], src: types.Iterable[str], currdir: str, include: types.Iterable[str] = []) -> tuple[str, list[str]]:
     for LINE in src:
         PATH, FLAG = In.Rd(LINE)
         if(PATH == ''):
@@ -11,10 +10,17 @@ def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str]
                 ret.append(LINE if LINE.endswith('\n') else LINE)
             continue
 
-        FND_PATH, FND_SRC = In.Fnd(PATH, [currdir] if FLAG == Env.EXCLUDED else [currdir] + include)
-        if(FND_SRC == []): continue
-        ret += Include(FND_SRC, FND_PATH, include)
+        FND = In.Fnd(PATH, [currdir] if FLAG == Env.EXCLUDED else [currdir] + include)
+        if(FND[1] == []): continue
+        else: return FND
 
-        pass
+    return ("", []) 
+
+def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str] = []) -> list[str]:
+    ret = []
+
+    got = Include_Imp(ret, src, currdir, include)
+    while(got[1] != []):
+        got = Include_Imp(ret, src, got[0], got[1])
 
     return ret
