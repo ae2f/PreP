@@ -2,13 +2,13 @@ from . import In
 from . import Env
 import collections.abc as types
 
-def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str] = []) -> str:
-    ret = ''
+def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str] = []) -> list[str]:
+    ret = []
     for LINE in src:
         PATH, FLAG = In.Rd(LINE)
         if(PATH == ''):
             if(FLAG == In.RD_GOT_NOTHING[1]):
-                ret += LINE if LINE.endswith('\n') else LINE + '\n'
+                ret.append(LINE if LINE.endswith('\n') else LINE)
             continue
 
         FND_PATH, FND_SRC = In.Fnd(PATH, [currdir] if FLAG == Env.EXCLUDED else [currdir] + include)
@@ -17,4 +17,4 @@ def Include(src: types.Iterable[str], currdir: str, include: types.Iterable[str]
 
         pass
 
-    return ret + '\n'
+    return ret
